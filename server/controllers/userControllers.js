@@ -71,33 +71,74 @@ export const userLogin = async (req, res, next) => {
         }
 
         if (!userExist.isActive) {
-            return res.status(401).json({ message: "user account is not account" });
+            return res.status(401).json({ message: "user account is not active" });
         }
 
         //generate token
         const token = generateToken(userExist._id, "user");
         res.cookie("token", token);
 
+        delete userExist._doc.password;
         res.json({ data: userExist, message: "Login success" });
+
+        // {
+        //     const { password, ...userDataWithoutPassword } = userExist;
+        // res.json({ data: userDataWithoutPassword, message: "Login success" });
+        // }
     } catch (error) {
         res.status(error.statusCode || 500).json({ message: error.message || "Internal server" });
     }
 };
-
 
 export const userProfile = async (req, res, next) => {
     try {
+        //user Id
+        const userId = req.user.id;
+        const userData = await User.findById(userId).select("-password");
 
-        
-
-
-        //user Id 
-        const userId= 'fsdklfsflksf'
-        const userData = await User.findById(userId)
-
-        res.json({data:userData,message:"user profile fetched"})
-
+        res.json({ data: userData, message: "user profile fetched" });
     } catch (error) {
         res.status(error.statusCode || 500).json({ message: error.message || "Internal server" });
     }
 };
+
+export const userProfieUpdate = async (req, res, next) => {
+    try {
+        const { name, email, password, confirmPassword, mobile, profilePic } = req.body;
+
+        //user Id
+        const userId = req.user.id;
+        const userData = await User.findByIdAndUpdate(
+            userId,
+            { name, email, password, confirmPassword, mobile, profilePic },
+            { new: true }
+        );
+
+        res.json({ data: userData, message: "user profile fetched" });
+    } catch (error) {
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal server" });
+    }
+};
+
+
+export const userLogout = async (req, res, next) => {
+    try {
+        res.clearCookie("token");
+
+        res.json({  message: "user logout success" });
+    } catch (error) {
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal server" });
+    }
+};
+
+
+export const checkUser = async (req, res, next) => {
+    try {
+
+        res.json({  message: "user autherized" });
+    } catch (error) {
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal server" });
+    }
+};
+
+
