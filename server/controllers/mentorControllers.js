@@ -1,88 +1,115 @@
-import { User } from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/token.js";
+import { Mentor } from "../models/mentorModel.js";
+
+
 
 export const mentorSignup = async (req, res, next) => {
     try {
-        //collect user data
-        const { name, email, password, confirmPassword, mobile, profilePic } = req.body;
-
-        //data validation
-        if (!name || !email || !password || !confirmPassword || !mobile) {
-            return res.status(400).json({ message: "all fields required" });
+        const { name, email, password, mobile, profilePic } = req.body;
+        if (!name || !email || !password) {
+            return res.status(400).json({ success: false, message: "all fields required" });
         }
+        const isMentorExist = await Mentor.findOne({ email });
 
-        //check if already exist
-        const userExist = await Mentor.findOne({ email });
-
-        if (userExist) {
+        if (isMentorExist) {
             return res.status(400).json({ message: "user already exist" });
         }
 
-        //compare with confirm password
-        if (password !== confirmPassword) {
-            return res.status(400).json({ message: "password not same" });
-        }
+        const saltRounds = 10;
+        const hashedPassword = bcrypt.hashSync(password, saltRounds);
 
-        //password hashing
-        const hashedPassword = bcrypt.hashSync(password, 10);
+        const newMentor = new Mentor({ name, email, password: hashedPassword, mobile, profilePic });
+        await newMentor.save();
 
-        //save to db
-        const newUser = new Mentor({ name, email, password: hashedPassword, mobile, profilePic });
-        await newUser.save();
+        const token = generateToken(newMentor._id, "mentor");
 
-        //generate token usig Id and role
-        const token = generateToken(newUser._id, "mentor");
         res.cookie("token", token);
+        // res.cookie("token", token, {
+        //     sameSite: NODE_ENV === "production" ? "None" : "Lax",
+        //     secure: NODE_ENV === "production",
+        //     httpOnly: NODE_ENV === "production",
+        // });
 
-        res.json({ data: newUser, message: "signup success" });
+        res.json({ success: true, message: "mentor account created successfully" });
     } catch (error) {
-        res.status(error.statusCode || 500).json({ message: error.message || "Internal server" });
         console.log(error);
+        res.status(error.statusCode || 500).json(error.message || "Internal server error");
     }
 };
 
-export const userLogin = async (req, res, next) => {
+
+export const mentorLogin = async (req, res, next) => {
     try {
-        //collect user data
-        const { email, password, confirmPassword } = req.body;
-
-        //data validation
-        if (!email || !password || !confirmPassword) {
-            return res.status(400).json({ message: "all fields required" });
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: "all fields are required" });
         }
 
-        if (password !== confirmPassword) {
-            return res.status(400).json({ message: "password not same" });
+        const isMentorExist = await Mentor.findOne({ email });
+        if (!isMentorExist) {
+            return res.status(404).json({ success: false, message: "mentor does not exist" });
         }
 
-        // user exist - check
-        const userExist = await User.findOne({ email });
-
-        if (!userExist) {
-            return res.status(404).json({ message: "user not found" });
-        }
-
-        //password match with DB
-        const passwordMatch = bcrypt.compareSync(password, userExist.password);
-
+        const passwordMatch = bcrypt.compareSync(password, isMentorExist.password);
         if (!passwordMatch) {
-            return res.status(401).json({ message: "invalid credentials" });
+            return res.status(401).json({ message: "user not autherized" });
         }
 
-        if (!userExist.isActive) {
-            return res.status(401).json({ message: "user account is not account" });
-        }
+        const token = generateToken(isMentorExist._id, "mentor");
 
-        //generate token
-        const token = generateToken(userExist._id, "user");
         res.cookie("token", token);
+        // res.cookie("token", token, {
+        //     sameSite: NODE_ENV === "production" ? "None" : "Lax",
+        //     secure: NODE_ENV === "production",
+        //     httpOnly: NODE_ENV === "production",
+        // });
 
-        res.json({ data: userExist, message: "Login success" });
+        res.json({ success: true, message: "menotr login successfull" });
     } catch (error) {
-        res.status(error.statusCode || 500).json({ message: error.message || "Internal server" });
+        console.log(error);
+        res.status(error.statusCode || 500).json(error.message || "Internal server error");
     }
 };
 
 
+export const mentorProfile = async (req, res, next) => {
+    try {
+        const { user } = req;
 
+        const userData = await Mentor.findById(user.id).select("-password");
+
+        res.json({ success: true, message: "user profile fetched", userData });
+    } catch (error) {
+        console.log(error);
+        res.status(error.statusCode || 500).json(error.message || "Internal server error");
+    }
+};
+
+
+export const mentorLogout = async (req, res, next) => {
+    try {
+    
+        // res.clearCookie("token", {
+        //     sameSite: NODE_ENV === "production" ? "None" : "Lax",
+        //     secure: NODE_ENV === "production",
+        //     httpOnly: NODE_ENV === "production",
+        // });
+        res.clearCookie("token")
+        res.json({ success: true, message: "user logged out" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(error.statusCode || 500).json(error.message || "Internal server error");
+    }
+};
+
+
+export const checkMentor = async (req, res, next) => {
+    try {
+        res.json({ success: true, message: "mentor autherized" });
+    } catch (error) {
+        console.log(error);
+        res.status(error.statusCode || 500).json(error.message || "Internal server error");
+    }
+};

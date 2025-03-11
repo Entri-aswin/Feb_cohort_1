@@ -33,6 +33,10 @@ const courseSchema = new mongoose.Schema(
             type: String,
             default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaLGtEd0MJro4X9wDmT2vrvLT-HjKkyyWVmg&s",
         },
+        isActive: {
+            type: Boolean,
+            default: true,
+        },
         mentor: { type: mongoose.Types.ObjectId, ref: "Mentor" },
     },
     { timestamps: true }

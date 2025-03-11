@@ -11,7 +11,6 @@ export const authMentor = (req, res, next) => {
 
         //decode token
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        console.log(decodedToken, "=========Decoded token");
 
         if (!decodedToken) {
             return res.status(401).json({ message: "user not autherized" });
