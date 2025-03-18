@@ -1,21 +1,8 @@
-import { useState } from "react";
-import { PrimaryButton } from "./components/Button";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes/router";
 
 function App() {
-    const name = "hari";
-    const [count, setCount] = useState(0);
-
-    const updateCount = () => {
-        setCount(count + 1);
-    };
-
-    return (
-        <>
-            <h1>Parent Component</h1>
-            <PrimaryButton count={count} onClick={updateCount} />
-            <PrimaryButton count={count} onClick={updateCount} />
-        </>
-    );
+    return <RouterProvider router={router} />;
 }
 
 export default App;
