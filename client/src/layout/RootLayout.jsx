@@ -5,12 +5,14 @@ import { Outlet } from "react-router-dom";
 import { UserHeader } from "../components/user/UserHeader";
 
 export const RootLayout = () => {
-    const [isUserAuth, setIsUserAuth] = useState(true);
+    const [isUserAuth, setIsUserAuth] = useState(false);
 
     return (
         <div>
             {isUserAuth ? <UserHeader /> : <Header />}
-            <Outlet />
+            <div className="min-h-96">
+                <Outlet />
+            </div>
             <Footer />
         </div>
     );

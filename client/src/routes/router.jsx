@@ -6,12 +6,15 @@ import { RootLayout } from "../layout/RootLayout";
 import { Profile } from "../pages/user/Profile";
 import { ProtectRoutes } from "./ProtectRoutes";
 import { ErrorPage } from "../pages/shared/ErrorPage";
+import { Courses } from "../pages/user/Courses";
+import { CourseDetails } from "../pages/user/CourseDetails";
+import { LoginPage } from "../pages/shared/LoginPage";
 
 export const router = createBrowserRouter([
     {
         path: "",
         element: <RootLayout />,
-        errorElement: <ErrorPage/>,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: "",
@@ -27,11 +30,19 @@ export const router = createBrowserRouter([
             },
             {
                 path: "login",
-                element: <h1>Login</h1>,
+                element: <LoginPage />,
             },
             {
                 path: "signup",
                 element: <h1>Signup</h1>,
+            },
+            {
+                path: "courses",
+                element: <Courses />,
+            },
+            {
+                path: "courseDetails/:id",
+                element: <CourseDetails />,
             },
             {
                 element: <ProtectRoutes />,

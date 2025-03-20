@@ -1,16 +1,21 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export const Cards = () => {
+export const CourseCards = ({ course }) => {
+    const navigate = useNavigate();
+
     return (
-        <div className="card bg-base-100 w-96 shadow-sm">
+        <div className="card bg-base-100 shadow-xl w-96">
             <figure>
-                <img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp" alt="Shoes" />
+                <img src={course?.image} alt="courses" />
             </figure>
             <div className="card-body">
-                <h2 className="card-title">Card Title</h2>
-                <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                <h2 className="card-title">{course?.title} </h2>
+                <p>Price : {course?.price}Rs </p>
                 <div className="card-actions justify-end">
-                    <button className="btn btn-primary">Buy Now</button>
+                    <button className="btn btn-primary" onClick={() => navigate(`/courseDetails/${course?._id}`)}>
+                        Read More
+                    </button>
                 </div>
             </div>
         </div>
