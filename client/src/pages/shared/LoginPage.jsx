@@ -2,14 +2,14 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from "../../config/axiosInstance";
 import { Link, useNavigate } from "react-router-dom";
-// import { useDispatch } from "react-redux";
-// import { clearUser, saveUser } from "../../redux/features/userSlice";
+import { useDispatch } from "react-redux";
+import { clearUser, saveUser } from "../../redux/features/userSlice";
 // import toast from "react-hot-toast";
 
 export const LoginPage = ({ role }) => {
     const { register, handleSubmit } = useForm();
     const navigate = useNavigate();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const user = {
         role: "user",
@@ -27,21 +27,21 @@ export const LoginPage = ({ role }) => {
     const onSubmit = async (data) => {
         console.log(data);
 
-        // try {
-        //     const response = await axiosInstance({
-        //         method: "PUT",
-        //         url: user.loginAPI,
-        //         data: data,
-        //     });
-        //     console.log("response====", response);
-        //     dispatch(saveUser(response?.data?.data));
-        //     toast.success("Login success");
-        //     navigate(user.profileRoute);
-        // } catch (error) {
-        //     dispatch(clearUser());
-        //     toast.error("Login Failed");
-        //     console.log(error);
-        // }
+        try {
+            const response = await axiosInstance({
+                method: "PUT",
+                url: user.loginAPI,
+                data: data,
+            });
+            console.log("response====", response);
+            dispatch(saveUser(response?.data?.data));
+            // toast.success("Login success");
+            navigate(user.profileRoute);
+        } catch (error) {
+            dispatch(clearUser());
+            // toast.error("Login Failed");
+            console.log(error);
+        }
     };
 
     return (
@@ -73,6 +73,19 @@ export const LoginPage = ({ role }) => {
                                 className="input input-bordered"
                                 required
                             />
+
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Confirm Password</span>
+                                </label>
+                                <input
+                                    type="password"
+                                    placeholder="confirm-password"
+                                    {...register("confirmPassword")}
+                                    className="input input-bordered"
+                                    required
+                                />
+                            </div>
                             <div className="flex justify-between items-center">
                                 <label className="label">
                                     <a href="#" className="label-text-alt link link-hover">

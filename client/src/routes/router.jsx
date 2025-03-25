@@ -9,6 +9,7 @@ import { ErrorPage } from "../pages/shared/ErrorPage";
 import { Courses } from "../pages/user/Courses";
 import { CourseDetails } from "../pages/user/CourseDetails";
 import { LoginPage } from "../pages/shared/LoginPage";
+import { MentorLayout } from "../layout/mentorLayout";
 
 export const router = createBrowserRouter([
     {
@@ -45,6 +46,7 @@ export const router = createBrowserRouter([
                 element: <CourseDetails />,
             },
             {
+                path:"user",
                 element: <ProtectRoutes />,
                 children: [
                     {
@@ -60,6 +62,19 @@ export const router = createBrowserRouter([
                         element: <h1>payment</h1>,
                     },
                 ],
+            },
+        ],
+    },
+    {
+        path: "mentor",
+        element: <MentorLayout />,
+        children: [
+            {
+                path: "login",
+                element: <LoginPage role="mentor" />,
+            },
+            {
+                path: "signup",
             },
         ],
     },
