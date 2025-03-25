@@ -24,12 +24,12 @@ export const mentorSignup = async (req, res, next) => {
 
         const token = generateToken(newMentor._id, "mentor");
 
-        res.cookie("token", token);
-        // res.cookie("token", token, {
-        //     sameSite: NODE_ENV === "production" ? "None" : "Lax",
-        //     secure: NODE_ENV === "production",
-        //     httpOnly: NODE_ENV === "production",
-        // });
+        // res.cookie("token", token);
+        res.cookie("token", token, {
+            sameSite: NODE_ENV === "production" ? "None" : "Lax",
+            secure: NODE_ENV === "production",
+            httpOnly: NODE_ENV === "production",
+        });
 
         res.json({ success: true, message: "mentor account created successfully" });
     } catch (error) {
@@ -58,12 +58,12 @@ export const mentorLogin = async (req, res, next) => {
 
         const token = generateToken(isMentorExist._id, "mentor");
 
-        res.cookie("token", token);
-        // res.cookie("token", token, {
-        //     sameSite: NODE_ENV === "production" ? "None" : "Lax",
-        //     secure: NODE_ENV === "production",
-        //     httpOnly: NODE_ENV === "production",
-        // });
+        // res.cookie("token", token);
+        res.cookie("token", token, {
+            sameSite: NODE_ENV === "production" ? "None" : "Lax",
+            secure: NODE_ENV === "production",
+            httpOnly: NODE_ENV === "production",
+        });
 
         res.json({ success: true, message: "menotr login successfull" });
     } catch (error) {
@@ -90,12 +90,11 @@ export const mentorProfile = async (req, res, next) => {
 export const mentorLogout = async (req, res, next) => {
     try {
     
-        // res.clearCookie("token", {
-        //     sameSite: NODE_ENV === "production" ? "None" : "Lax",
-        //     secure: NODE_ENV === "production",
-        //     httpOnly: NODE_ENV === "production",
-        // });
-        res.clearCookie("token")
+        res.clearCookie("token", {
+            sameSite: NODE_ENV === "production" ? "None" : "Lax",
+            secure: NODE_ENV === "production",
+            httpOnly: NODE_ENV === "production",
+        });
         res.json({ success: true, message: "user logged out" });
 
     } catch (error) {
