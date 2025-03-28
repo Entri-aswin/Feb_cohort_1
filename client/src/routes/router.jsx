@@ -10,6 +10,7 @@ import { Courses } from "../pages/user/Courses";
 import { CourseDetails } from "../pages/user/CourseDetails";
 import { LoginPage } from "../pages/shared/LoginPage";
 import { MentorLayout } from "../layout/mentorLayout";
+import { CartPage } from "../pages/user/CartPage";
 
 export const router = createBrowserRouter([
     {
@@ -46,7 +47,7 @@ export const router = createBrowserRouter([
                 element: <CourseDetails />,
             },
             {
-                path:"user",
+                path: "user",
                 element: <ProtectRoutes />,
                 children: [
                     {
@@ -55,7 +56,7 @@ export const router = createBrowserRouter([
                     },
                     {
                         path: "cart",
-                        element: <h1>cart</h1>,
+                        element: <CartPage />,
                     },
                     {
                         path: "payment",

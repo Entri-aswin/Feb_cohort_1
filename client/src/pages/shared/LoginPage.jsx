@@ -25,7 +25,6 @@ export const LoginPage = ({ role }) => {
     }
 
     const onSubmit = async (data) => {
-        console.log(data);
 
         try {
             const response = await axiosInstance({
@@ -88,16 +87,10 @@ export const LoginPage = ({ role }) => {
                             </div>
                             <div className="flex justify-between items-center">
                                 <label className="label">
-                                    <a href="#" className="label-text-alt link link-hover">
-                                        Forgot password?
-                                    </a>
+                                    <Link>Forgot password?</Link>
                                 </label>
                                 <label className="label">
-                                    <Link to={user.signupRoute}>
-                                        <a href="#" className="label-text-alt link link-hover">
-                                            New User?
-                                        </a>
-                                    </Link>
+                                    <Link to={user.signupRoute}>New User?</Link>
                                 </label>
                             </div>
                         </div>
