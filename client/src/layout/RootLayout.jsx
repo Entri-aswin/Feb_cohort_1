@@ -24,6 +24,7 @@ export const RootLayout = () => {
         } catch (error) {
             console.log(error);
             dispatch(clearUser());
+            setIsLoading(false)
         }
     };
 

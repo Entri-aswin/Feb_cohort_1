@@ -62,13 +62,22 @@ export const router = createBrowserRouter([
                         path: "payment",
                         element: <h1>payment</h1>,
                     },
+                    {
+                        path: "payment/success",
+                        element: <h1>Payment success </h1>,
+                    },
+                    {
+                        path: "payment/cancel",
+                        element: <h1>Payment Cancelled </h1>,
+                    },
                 ],
             },
         ],
     },
     {
-        path: "mentor",
+        path: "admin",
         element: <MentorLayout />,
+        // element: <AdminLayout />,
         children: [
             {
                 path: "login",
@@ -76,6 +85,16 @@ export const router = createBrowserRouter([
             },
             {
                 path: "signup",
+            },
+            {
+                element: <ProtectedRoutesAdmin />,
+                children:[
+                    //profile
+                    // userlistingpage
+                    // product create page
+                    // mentorListing page
+                    
+                ],
             },
         ],
     },

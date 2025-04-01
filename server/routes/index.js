@@ -4,6 +4,7 @@ import { mentorRouter } from "./mentorRoutes.js";
 import { courseRouter } from "./courseRoutes.js";
 import { cartRouter } from "./cartRoutes.js";
 import { reviewRouter } from "./reviewRoutes.js";
+import { paymentRouter } from "./paymentRoutes.js";
 
 const router = e.Router()
 
@@ -17,6 +18,7 @@ router.use("/course",courseRouter)
 // cart
 router.use("/cart",cartRouter)
 router.use("/review",reviewRouter)
+router.use("/payment",paymentRouter)
 // payment
 
 
